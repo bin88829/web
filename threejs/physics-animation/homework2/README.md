@@ -11,5 +11,5 @@ Continuing [Homework1](https://github.com/bin88829/web/tree/master/threejs/physi
 ### Demo Video
 [![Link](http://img.youtube.com/vi/rH36wForGb0/0.jpg)](http://www.youtube.com/watch?v=rH36wForGb0)
 
-Due date: Nov.22. 2014
+Due date: Oct.22. 2014
 
