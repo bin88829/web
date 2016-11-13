@@ -1,5 +1,5 @@
 ## Physically Based Animation Homework2
-Continuing [Homework1](https://github.com/bin88829/web/tree/master/threejs/physics-animation/homework1)
+Continued from [Homework1](https://github.com/bin88829/web/tree/master/threejs/physics-animation/homework1)
 
 ### Implement Impulse based collision handler
 
