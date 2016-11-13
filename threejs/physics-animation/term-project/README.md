@@ -23,10 +23,10 @@ Continued from [Homework2](https://github.com/bin88829/web/tree/master/threejs/p
 
 ### Result
 1. Implicit Euler Method
-[![Link](http://img.youtube.com/vi/urBGSMNdgpQ/0.jpg)](http://www.youtube.com/watch?v=urBGSMNdgpQ)
+    [![Link](http://img.youtube.com/vi/urBGSMNdgpQ/0.jpg)](http://www.youtube.com/watch?v=urBGSMNdgpQ)
 
 2. Explicit Euler Method
-[![Link](http://img.youtube.com/vi/-FTIIJMbzqM/0.jpg)](http://www.youtube.com/watch?v=-FTIIJMbzqM)
+    [![Link](http://img.youtube.com/vi/-FTIIJMbzqM/0.jpg)](http://www.youtube.com/watch?v=-FTIIJMbzqM)
 
 ### Conclusion
 1. Collision particle and plane
@@ -34,3 +34,6 @@ Continued from [Homework2](https://github.com/bin88829/web/tree/master/threejs/p
 2. Collision between ropes method is not that efficient
 3. Compare to explicit method
     - more stable
+
+### Reference
+[Physics for JavaScript Games Animation Simulations](https://github.com/devramtal/Physics-for-JavaScript-Games-Animation-Simulations)
