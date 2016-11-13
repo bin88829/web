@@ -1,12 +1,13 @@
 function planeToCube(){
-	var p1 = new THREE.Vector3(0,0,10),
-		p2 = new THREE.Vector3(20,0,10),
-		p3 = new THREE.Vector3(20,20,10),
-		p4 = new THREE.Vector3(20,20,20),
-		p5 = new THREE.Vector3(20,0,20),
-		p6 = new THREE.Vector3(0,20,20),
-		p7 = new THREE.Vector3(0,20,10),
-		p8 = new THREE.Vector3(0,0,20);
+    var p1 = new THREE.Vector3(5,5,13),
+        p2 = new THREE.Vector3(15,5,13),
+        p3 = new THREE.Vector3(15,15,13),
+        p4 = new THREE.Vector3(15,15,20),
+        p5 = new THREE.Vector3(15,5,20),
+        p6 = new THREE.Vector3(5,15,20),
+        p7 = new THREE.Vector3(5,15,13),
+        p8 = new THREE.Vector3(5,5,20);
+
 
 	cube = [];
 
