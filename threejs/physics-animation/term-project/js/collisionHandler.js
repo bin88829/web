@@ -4,7 +4,7 @@ function CollisionHandler(){
 CollisionHandler.collisionBetweenParticleAndPlane = function(i, particle_array, planeObj){
 	var particlePositionMinusP = particle_array[i].pos.clone().sub(planeObj.p); //b
 	var particlePositionBeforeCollision = particle_array[i].pos.clone(); //x(tn)
-	
+
 	var particleVelocityBeforeCollision = particle_array[i].velo.clone();
 	var normalVelocityBeforeCollision = planeObj.normal_vector.clone().multiplyScalar(particleVelocityBeforeCollision.dot(planeObj.normal_vector));
 	var planeVelocityBeforeCollision = particleVelocityBeforeCollision.clone().sub(normalVelocityBeforeCollision);
@@ -14,14 +14,14 @@ CollisionHandler.collisionBetweenParticleAndPlane = function(i, particle_array, 
 	var particlePositionAfterCollision = particle_array[i].pos.clone();
 
 	var veloVec3AfterCollision = normalVelocityBeforeCollision.clone().multiplyScalar(-e).add(planeVelocityBeforeCollision.clone().multiplyScalar(c));
-	
-	var a = new THREE.Vector3(); 
+
+	var a = new THREE.Vector3();
 	a.subVectors(particlePositionBeforeCollision,particlePositionAfterCollision);
-	
+
 	var aCrossB = new THREE.Vector3();
 	aCrossB.crossVectors(a, particlePositionMinusP);
 	var uCrossVDotA = planeObj.uCrossV.dot(a);
-	
+
 	var s = aCrossB.dot(planeObj.v) / uCrossVDotA;
 	var t = (-1 * aCrossB.dot(planeObj.u)) / uCrossVDotA
 	var lamda =  planeObj.uCrossV.dot(particlePositionMinusP)/ uCrossVDotA;
@@ -55,7 +55,7 @@ CollisionHandler.collisionBetweenParticles = function(i, particles_array){
 	for (var i = 0; i < particleManager.length; i++) {
 		for (var j = i + 1 ; j < particleManager.length; j++) {
 			CollisionHandler.collisionTwoParticles(particleManager.particles_array[i], particleManager.particles_array[j]);
-		};		
+		};
 	};
 	*/
 }
@@ -64,12 +64,12 @@ CollisionHandler.collisionTwoParticles = function (particleB, particleA){
 	var distance = new THREE.Vector3();
 	distance.subVectors(particleB.pos, particleA.pos);
 	var z = distance.length() - (particleB.r + particleA.r);
-	
+
 	if(z < 0){
 		var n = distance.clone().normalize();
-		
+
 		var uBeforeCollision = particleB.velo.clone().sub(particleA.velo).dot(n);
-		
+
 		var j = (1+e) * ((particleA.m * particleB.m)/( particleA.m + particleB.m )) * uBeforeCollision;
 
 		particleA.velo.add(n.clone().multiplyScalar(j/particleA.m));
@@ -78,8 +78,6 @@ CollisionHandler.collisionTwoParticles = function (particleB, particleA){
 
 		//console.log("Collision occurs between particles");
 
-	}else{
-		
 	}
 }
 CollisionHandler.collisionBetweenParticleAndPlanes = function(i, particle_array, planes){
@@ -89,7 +87,7 @@ CollisionHandler.collisionBetweenParticleAndPlanes = function(i, particle_array,
 	EulerExplicit(i, particle_array);
 	var particlePositionAfterCollision = particle_array[i].pos.clone();
 
-	var a = new THREE.Vector3(); 
+	var a = new THREE.Vector3();
 	a.subVectors(particlePositionBeforeCollision,particlePositionAfterCollision);
 
 	for(var j = 0; j < planes.length; j++){
@@ -112,7 +110,7 @@ CollisionHandler.collisionBetweenParticleAndPlanes = function(i, particle_array,
 		if((0 <= s && s <= 1) && (0 <= t && t <= 1) && (0 <= lamda && lamda <= 1)){
 			// console.log("Collision occur on the Finite Plane");
 			particle_array[i].velo = veloVec3AfterCollision;
-			particle_array[i].pos = posVec3AfterCollision;	
+			particle_array[i].pos = posVec3AfterCollision;
 		}
 	}
 }
@@ -131,34 +129,36 @@ function projectedPlanePoint(particle, plane){
 	return plane.planeEquation(s,t);
 }
 
-var kDamping = 1;
-var kSpring = 10;
-var springLength = 0.1;
+var kDamping = 20;
+var kSpring = 500;
+var springLength = 0.05;
 
 function calcForce_spring(num, particles_array){
 	var centerPrev;
 	var centerNext;
 	if (num > 0){
-		centerPrev = particles_array[num-1].pos;
+		centerPrev = particles_array[num-1];
 		// console.log(centerPrev);
 	}else{
-		centerPrev = particles_array[0].pos;
+		centerPrev = particles_array[0];
 	}
 	if (num < particles_array.length-1){
-		centerNext = particles_array[num+1].pos;
+		centerNext = particles_array[num+1];
 	}else{
-		centerNext = particles_array[num].pos;
+		centerNext = particles_array[num];
 	}
 	var gravity = Forces3.constantGravity(particles_array[num].m, g);
 	// if(particles_array[num].velo.length() < 0 ){
 	// 	console.log(particles_array[num]);
 	// }
-	var damping = Forces3.damping(kDamping, particles_array[num].velo);
+	var velo = particles_array[num].velo.clone().multiplyScalar(2).sub(centerPrev.velo).sub(centerNext.velo);
+	var damping = Forces3.damping(kDamping, velo);
 
-	var prev_center = particles_array[num].pos.clone().sub(centerPrev);
-	var next_center = particles_array[num].pos.clone().sub(centerNext);
-	var restoringPrev = prev_center.clone().normalize().multiplyScalar( -kSpring * ( prev_center.length() - springLength ) );	
+	prev_center = particles_array[num].pos.clone().sub(centerPrev.pos);
+	var next_center = particles_array[num].pos.clone().sub(centerNext.pos);
+	restoringPrev = prev_center.clone().normalize().multiplyScalar( -kSpring * ( prev_center.length() - springLength ) );
 	var restoringNext = next_center.clone().normalize().multiplyScalar( -kSpring * ( next_center.length() - springLength ) );
+	// console.log(restoringNext.x + "," + restoringNext.y + ","+restoringNext.z);
 
 	// var displPrev = particles_array[num].pos.clone().sub(centerPrev);
 	// var displNext = particles_array[num].pos.clone().sub(centerNext);		
@@ -171,21 +171,15 @@ function calcForce_spring(num, particles_array){
 	// force = Forces3.add([gravity]);
 	// force = Forces3.add([gravity, restoringPrev, restoringNext]);
 	// console.log(force);  
-}	
-// function updateAccel(mass){
-// 	acc = force.multiply(1/mass);
-// }	
-// function updateVelo(obj){
-// 	obj.velo2D = obj.velo2D.addScaled(acc,dt);				
-// }
+}
 
 
-function EulerExplicit(num, particle_array){			
+function EulerExplicit(num, particle_array){
 	// acc = getAcc(obj.pos.clone(),obj.velo.clone());
 	var obj = particle_array[num];
-	acc = getAcc(num, particle_array); 
+	acc = getAcc(num, particle_array);
 	obj.pos=obj.pos.add(obj.velo.clone().multiplyScalar(dt));
-	obj.velo=obj.velo.add(acc.clone().multiplyScalar(dt));		
+	obj.velo=obj.velo.add(acc.clone().multiplyScalar(dt));
 }
 function getAcc(num, particle_array){
 	var obj = particle_array[num];
@@ -193,10 +187,7 @@ function getAcc(num, particle_array){
 	// calcForce(num, particle_array);
 	return force.multiplyScalar(1/obj.m);
 }
-// function getAcc(pos,vel){
-// 	calcForce(pos,vel);
-// 	return force.multiplyScalar(1/mass);
-// }
+
 function calcForce(num, particle_array){
 	var obj = particle_array[num];
 	var gravity = Forces3.constantGravity(obj.m,g);
@@ -206,9 +197,3 @@ function calcForce(num, particle_array){
 	force = Forces3.add([gravity]);
 	// console.log(force);		
 }
-// function calcForce(pos,vel){
-// 	var gravity = Forces3.constantGravity(mass,g);
-// 	// var drag = Forces3D.linearDrag(k,vel);
-// 	// force = Forces3D.add([gravity, drag]);
-// 	force = Forces3.add([gravity]);		
-// }

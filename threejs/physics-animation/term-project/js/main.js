@@ -26,23 +26,23 @@ function init(){
 	planeToCube();
 
 	createRope();
-	
-	// createFloor();
+
+	createFloor();
 
 	showAixs();
 
-	t0 = new Date().getTime(); 
-	
+	t0 = new Date().getTime();
+
 	animFrame();
 	initEvent();
 }
 
 function createFloor(){
 	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
-	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping; 
+	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
 	floorTexture.repeat.set( 10, 10 );
 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
-	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+	var floorGeometry = new THREE.PlaneGeometry(100, 100, 10, 10);
 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.position.z = -2;
 	// floor.rotation.x = Math.PI / 2;
@@ -50,11 +50,12 @@ function createFloor(){
 }
 
 function createRope(){
-	for(var i =0; i<6; i++){
-		pManager.addParticle(scene, new THREE.Vector3(0.5, 0.5, 0.9-(0.15*i)), 1, 0.05, 0x0000FF);
+	pManager.addParticle(scene, new THREE.Vector3(10,10,21), 1, 0.05, 0x0000FF);
+	for(var i =1; i<40; i++){
+		pManager.addParticle(scene, new THREE.Vector3(10, 10, 20-(0.15*i)), 1, 0.05, 0x0000FF);
 	}
 }
-	
+
 
 function setInitValue(){
 	g = -10;
@@ -109,24 +110,24 @@ function animFrame(){
 	stats.end();
 }
 function onTimer(){
-	var t1 = new Date().getTime(); 
-	dt = 0.0005*(t1-t0); 
+	var t1 = new Date().getTime();
+	dt = 0.00001*(t1-t0);
 	t0 = t1;
 	if (dt>0.2) {dt=0;};
 
-    move();    
+    move();
 }
 function move(){
-	
+
 	if(pManager.length !== 0 ){
 		for(var i = 0; i < pManager.length; i++){
 			CollisionHandler.collisionBetweenParticleAndPlanes(i, pManager.particles_array,cube);
-			CollisionHandler.collisionBetweenParticles(i,pManager.particles_array);
-			// CollisionHandler.collisionInRope(i,pManager.particles_array);
+			// CollisionHandler.collisionBetweenParticles(i,pManager.particles_array);
+			CollisionHandler.collisionInRope(i,pManager.particles_array);
 			pManager.particles_array[i].moveObject();
 		}
 	}
-	
+
 	/*
 	if(pManager.length !== 0 ){
 		for(var i = 0; i < pManager.length; i++){
@@ -139,7 +140,8 @@ function move(){
 	*/
 	pManager.updateSpring(scene);
 	controls.update();
-	renderer.render(scene, camera);	
+	camera.lookAt( new THREE.Vector3(20,20,0) );
+	renderer.render(scene, camera);
 }
 
 function particleProjectToPlaneCordinate(particleObj, planeObj){
@@ -154,7 +156,7 @@ function particleProjectToPlaneCordinate(particleObj, planeObj){
 	s = (1/((uLengthSq * vLengthSq) - Math.pow(planeObj.uDotV,2))) * ( (planeObj.u.clone().multiplyScalar(vLengthSq)).sub(planeObj.v.clone().multiplyScalar(planeObj.uDotV)).dot(particlePositionMinusP));
 	t = (1/((uLengthSq * vLengthSq) - Math.pow(planeObj.uDotV,2))) * ( (planeObj.u.clone().multiplyScalar(-planeObj.uDotV)).add(planeObj.v.clone().multiplyScalar(uLengthSq)).dot(particlePositionMinusP));
 	result = planeObj.planeEquation(s,t);
-	
+
 	return result;
 }
 
@@ -181,11 +183,13 @@ function initScene(){
 
 	var angle = 45, aspect = width/height, near = 0.1, far = 20000;
 	camera = new THREE.PerspectiveCamera(angle, aspect, near, far);
-	// camera.position.set(1,0,7);
-	camera.position.set(0,-2.5,4);
-	// camera.up = new THREE.Vector3(0,0,0);
+
+	// camera.position.set(0,-2.5,4);
+	camera.position.set(0,0,25);
+
+	// camera.up = new THREE.Vector3(10,10,0);
 	scene.add(camera);
-	
+
 	var light = new THREE.DirectionalLight();
 	light.position.set(-10,0,20);
 	scene.add(light);

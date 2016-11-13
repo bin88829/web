@@ -1,45 +1,45 @@
 function planeToCube(){
-	var p1 = new THREE.Vector3(0,0,0),
-		p2 = new THREE.Vector3(1,0,0),
-		p3 = new THREE.Vector3(1,1,0),
-		p4 = new THREE.Vector3(1,1,1),
-		p5 = new THREE.Vector3(1,0,1),
-		p6 = new THREE.Vector3(0,1,1),
-		p7 = new THREE.Vector3(0,1,0),
-		p8 = new THREE.Vector3(0,0,1);
+	var p1 = new THREE.Vector3(0,0,10),
+		p2 = new THREE.Vector3(20,0,10),
+		p3 = new THREE.Vector3(20,20,10),
+		p4 = new THREE.Vector3(20,20,20),
+		p5 = new THREE.Vector3(20,0,20),
+		p6 = new THREE.Vector3(0,20,20),
+		p7 = new THREE.Vector3(0,20,10),
+		p8 = new THREE.Vector3(0,0,20);
 
 	cube = [];
 
-	var plane1 = new PlaneObject();	
+	var plane1 = new PlaneObject();
 	plane1.init(p8,p5,p1);
 	cube.push(plane1);
 	scene.add(plane1.mesh_obj);
 
-	var plane2 = new PlaneObject();	
+	var plane2 = new PlaneObject();
 	plane2.init(p1,p8,p7);
 	cube.push(plane2);
 	scene.add(plane2.mesh_obj);
 
-	var plane3 = new PlaneObject();	
+	var plane3 = new PlaneObject();
 	plane3.init(p1,p2,p7);
 	cube.push(plane3);
 	scene.add(plane3.mesh_obj);
 
-	var plane4 = new PlaneObject();	
+	var plane4 = new PlaneObject();
 	plane4.init(p2,p3,p5);
 	cube.push(plane4);
 	scene.add(plane4.mesh_obj);
 
-	var plane5 = new PlaneObject();	
+	var plane5 = new PlaneObject();
 	plane5.init(p3,p4,p7);
 	cube.push(plane5);
 	scene.add(plane5.mesh_obj);
 
-	var plane6 = new PlaneObject();	
+	var plane6 = new PlaneObject();
 	plane6.init(p8,p6,p5);
 	cube.push(plane6);
 	scene.add(plane6.mesh_obj);
-	
+
 }
 
 function ParticleManager(){
@@ -62,7 +62,7 @@ ParticleManager.prototype = {
 		if(this.length !== 0 ){
 			var last_create_particle = this.particles_array.shift();
 			scene.remove(last_create_particle.mesh_obj);
-			this.length = this.particles_array.length;	
+			this.length = this.particles_array.length;
 		}else{
 			console.log("There is no particle");
 			alert("There is no particle");
@@ -131,11 +131,11 @@ PlaneObject.prototype = {
 	    planeGeometry.vertices[1]=this.planeEquation(0,1);
 	    planeGeometry.vertices[2]=this.planeEquation(1,0);
 	    planeGeometry.vertices[3]=this.planeEquation(1,1);
-	 
+
 	    this.mesh_obj = new THREE.Mesh(planeGeometry,new THREE.MeshBasicMaterial({
 	    	map: THREE.ImageUtils.loadTexture('images/plywood.jpg'),
 	    	side: THREE.DoubleSide,
-	    	transparent: true, 
+	    	transparent: true,
 	    	opacity: 0.3
 	    }));
 	    //MeshNormalMaterial
@@ -169,13 +169,13 @@ ParticleObject.prototype = {
 	moveObject: function(){
 		this.mesh_obj.position.set(this.pos.x, this.pos.y, this.pos.z);
 	},
-	init: function(pP, m, r, c){ /*r, c mass optional*/ 
+	init: function(pP, m, r, c){ /*r, c mass optional*/
 		if (r === undefined) r = radius;
 		if (c === undefined) c = particle_color;
 		if (m === undefined) m = mass;
 		this.r = r;
 		this.c = c;
-		this.m = m; 
+		this.m = m;
 		var sphereGeometry = new THREE.SphereGeometry(this.r,20,20);
 		var sphereMaterial = new THREE.MeshLambertMaterial({ color: this.c });
 		this.mesh_obj = new THREE.Mesh(sphereGeometry,sphereMaterial);
