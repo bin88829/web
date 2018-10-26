@@ -4,3 +4,6 @@
 [submodule "WebRTC/example1"]
 	path = WebRTC/example1
 	url = git@github.com:jungbin-kim/webrtc-example.git
+[submodule "Worker/web-worker-example1"]
+	path = Worker/web-worker-example1
+	url = git@github.com:jungbin-kim/simple-web-worker.git
