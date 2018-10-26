@@ -7,3 +7,6 @@
 [submodule "Worker/web-worker-example1"]
 	path = Worker/web-worker-example1
 	url = git@github.com:jungbin-kim/simple-web-worker.git
+[submodule "Bundler/example-parcel"]
+	path = Bundler/example-parcel
+	url = https://github.com/jungbin-kim/parcel-test
