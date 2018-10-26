@@ -1,3 +1,6 @@
 [submodule "threejs/physics-animation/refactoring"]
 	path = threejs/physics-animation/refactoring
 	url = git@github.com:jungbin-kim/web-physics-animation-re.git
+[submodule "WebRTC/example1"]
+	path = WebRTC/example1
+	url = git@github.com:jungbin-kim/webrtc-example.git
