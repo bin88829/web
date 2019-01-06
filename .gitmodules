@@ -10,3 +10,6 @@
 [submodule "Bundler/example-parcel"]
 	path = Bundler/example-parcel
 	url = https://github.com/jungbin-kim/parcel-test
+[submodule "Vue"]
+	path = Vue
+	url = git@github.com:jungbin-kim/Vue.git
